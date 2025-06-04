@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>动态 To-Do List</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 60px;
+      color: #333;
+    }
+
+    .todo-container {
+      width: 100%;
+      max-width: 500px;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #3f87f6;
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px 15px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #3f87f6;
+      outline: none;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #3f87f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #2e6bcf;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    li {
+      background: #f9f9f9;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      opacity: 1;
+      transform: translateX(0);
+      transition: all 0.3s ease;
+    }
+
+    li.slide-out {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+
+    .delete-btn {
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      color: #ff5c5c;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .delete-btn:hover {
+      color: #d63333;
+    }
+  </style>
+</head>
+<body>
+
+<div class="todo-container">
+  <h1>📝 我的任务清单</h1>
+  <form id="todo-form">
+    <input type="text" id="todo-input" placeholder="输入你的任务..." required />
+    <button type="submit">添加</button>
+  </form>
+  <ul id="todo-list"></ul>
+</div>
+
+<script>
+  const form = document.getElementById('todo-form');
+  const input = document.getElementById('todo-input');
+  const list = document.getElementById('todo-list');
+
+  // 添加任务函数
+  function addTodo(text) {
+    const li = document.createElement('li');
+    li.textContent = text;
+
+    const btn = document.createElement('button');
+    btn.innerHTML = '×';
+    btn.className = 'delete-btn';
+
+    btn.addEventListener('click', () => {
+      li.classList.add('slide-out');
+      setTimeout(() => li.remove(), 300); // 延迟移除以便动画播放
+    });
+
+    li.appendChild(btn);
+    list.appendChild(li);
+
+    // 动画效果
+    setTimeout(() => {
+      li.style.opacity = 1;
+      li.style.transform = 'translateX(0)';
+    }, 10);
+  }
+
+  // 表单提交事件监听
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (text !== '') {
+      addTodo(text);
+      input.value = '';
+    }
+  });
+</script>
+
+</body>
+</html>
